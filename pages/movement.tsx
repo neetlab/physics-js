@@ -3,7 +3,9 @@ import { useState } from "react";
 import { Ball } from "../components/app/Ball";
 import { useLinearMotion } from "../components/hooks/useLinearMotion";
 import { useAcceleration } from "../components/hooks/useAcceleration";
-import { Metre } from "../components/app/Metre";
+import { Metre, Input } from "../components/app/Metre";
+import { useHorizontalLaunch } from "../components/hooks/useHorizontalLaunch";
+import { useObliqueLaunch } from "../components/hooks/useObliqueLaunch";
 
 const Linear = () => {
   const [velocity, setVelocity] = useState(50);
@@ -68,7 +70,7 @@ const FreeFall = () => {
       <div
         className={classNames(
           "relative",
-          "h-1/2",
+          "h-96",
           "w-8",
           "overflow-scroll",
           "bg-gray-200"
@@ -97,7 +99,7 @@ const ThrowDown = () => {
       <div
         className={classNames(
           "relative",
-          "h-1/2",
+          "h-96",
           "w-8",
           "overflow-scroll",
           "bg-gray-200"
@@ -126,25 +128,21 @@ const ThrowUp = () => {
       <div
         className={classNames(
           "relative",
-          "h-1/2",
+          "h-96",
           "w-8",
           "overflow-scroll",
           "bg-gray-200",
-          "transform",
-          "rotate-180"
         )}
       >
-        <Ball x={0} y={y} />
+        <Ball x={0} y={-y} origin="bottom" />
       </div>
     </div>
   );
 };
 
-const HorizontalEmission = () => {
+const HorizontalLaunch = () => {
   const [vx0, setInitialVelocity] = useState(50);
-
-  const x = useLinearMotion(vx0);
-  const [y, vy] = useAcceleration(0, 9.8);
+  const [x, y, vy] = useHorizontalLaunch(vx0);
 
   return (
     <div>
@@ -152,18 +150,18 @@ const HorizontalEmission = () => {
       <h3>X軸方向</h3>
       <Metre
         initialVelocity={vx0}
-        acceleration={9.8}
-        velocity={vy}
+        acceleration={0}
+        velocity={vx0}
         onChangeInitialVelocity={setInitialVelocity}
       />
 
       <h3>Y軸方向</h3>
-      <Metre initialVelocity={0} acceleration={9.8} velocity={vy} />
+      <Metre initialVelocity={0} acceleration={-9.8} velocity={vy} />
 
       <div
         className={classNames(
           "relative",
-          "h-screen",
+          "h-96",
           "w-screen",
           "overflow-scroll",
           "bg-gray-200",
@@ -171,6 +169,52 @@ const HorizontalEmission = () => {
         )}
       >
         <Ball x={x} y={y} />
+      </div>
+    </div>
+  );
+};
+
+const ObliqueLaunch = () => {
+  const [v0, setInitialVelocity] = useState(50);
+  const [angle, setAngle] = useState(1/4);
+  const [x, y, vx, vy, vx0, vy0] = useObliqueLaunch(v0, Math.PI * angle);
+
+  return (
+    <div>
+      <h2 className="text-lg font-bold">斜方投射</h2>
+      <h3>投射</h3>
+
+      <label>
+        初速度ベクトル長
+        <Input value={v0} onChange={setInitialVelocity} />
+      </label> 
+
+      <label>
+        角度 [rad] π *
+        <Input value={angle} onChange={setAngle} />
+      </label> 
+
+
+      <h3>X軸方向</h3>
+      <Metre
+        initialVelocity={vx0}
+        acceleration={0}
+        velocity={vx}
+      />
+
+      <h3>Y軸方向</h3>
+      <Metre initialVelocity={vy0} acceleration={9.8} velocity={vy} />
+
+      <div
+        className={classNames(
+          "relative",
+          "h-96",
+          "w-full",
+          "overflow-scroll",
+          "bg-gray-200",
+         )}
+      >
+        <Ball x={x} y={-y} origin="bottom" />
       </div>
     </div>
   );
@@ -184,14 +228,15 @@ const Movement = () => {
 
       <hr className="bg-gray-500 h-1 m-8" />
 
-      <div className="flex justify-between h-screen">
+      <div className="flex justify-between">
         <FreeFall />
         <ThrowDown />
         <ThrowUp />
       </div>
 
       <hr className="bg-gray-500 h-1 m-8" />
-      <HorizontalEmission />
+      <HorizontalLaunch />
+      <ObliqueLaunch />
     </div>
   );
 };

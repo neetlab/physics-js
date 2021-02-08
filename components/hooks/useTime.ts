@@ -5,7 +5,7 @@ export type UseTimeRequest = {
   readonly refreshOn: number;
 }
 
-export const useTime = (req: UseTimeRequest = { refreshOn: 10 }) => {
+export const useTime = (req: UseTimeRequest = { refreshOn: 20 }) => {
   const [t, setT] = useState(0);
 const [ticks, setTicks] = useState(0);
 

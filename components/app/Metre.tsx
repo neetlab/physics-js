@@ -7,7 +7,7 @@ export type InputProps = {
   readonly onChange?: (value: number) => void;
 };
 
-const Input = (props: InputProps) => {
+export const Input = (props: InputProps) => {
   const { value, disabled, onChange } = props;
 
   return (
@@ -21,7 +21,8 @@ const Input = (props: InputProps) => {
         "font-mono",
         "border",
         "border-blue-500",
-        "disabled:opacity-75"
+        "disabled:opacity-75",
+        "disabled:border-0",
       )}
       onChange={(e) => onChange?.(Number(e.target.value))}
     />
@@ -51,19 +52,19 @@ export const Metre = (props: MetreProps) => {
     <div className="flex flex-wrap space-x-4">
       <label>
         初速度
-        <Input value={initialVelocity} onChange={onChangeInitialVelocity} disabled={onChangeInitialVelocity != null} />
+        <Input value={initialVelocity} onChange={onChangeInitialVelocity} disabled={onChangeInitialVelocity == null} />
         [m/s]
       </label>
 
       <label>
         加速度
-        <Input value={acceleration} onChange={onChangeAcceleration} disabled={onChangeAcceleration != null} />
+        <Input value={acceleration} onChange={onChangeAcceleration} disabled={onChangeAcceleration == null} />
         [m/s^2]
       </label>
 
       <label>
         速度
-        <Input value={Math.round(velocity)} onChange={onChangeVelocity} disabled={onChangeVelocity != null} />
+        <Input value={Math.round(velocity)} onChange={onChangeVelocity} disabled={onChangeVelocity == null} />
         [m/s] approx.
       </label>
     </div>
