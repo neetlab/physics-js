@@ -17,6 +17,7 @@ export const Ball = (props: BallProps) => {
         "w-8",
         "h-8",
         "bg-blue-800",
+        'shadow-md',
         "rounded-full"
       )}
       style={{ transform: `translate(${x}px, ${y}px)` }}

@@ -1,14 +1,8 @@
-import { useState } from "react";
-import { useRaf, useRafLoop } from "react-use";
+import { useTime } from "./useTime";
 
 // 等速直線運動
 export const useLinearMotion = (v: number) => {
-  const [t, setT] = useState(0);
-
-  useRafLoop((time) => {
-    setT(time / 1000);
-  });
-
+  const t = useTime();
   const x = v * t;
   return x;
 }
